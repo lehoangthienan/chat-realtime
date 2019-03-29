@@ -125,7 +125,7 @@ class Auth extends Component {
                         </Button>
                         <hr style={styles.hr}/>
                         <div style={styles.textRight}>
-                            <Typography variant="body1" component="span" align="right" style={{display: "inline-block"}}>Not a member?</Typography>
+                            <Typography variant="body1" component="span" align="right" style={{display: "inline-block"}}>Not a user?</Typography>
                             <Typography variant="body1" component="span" align="right" color="primary" style={{display: "inline-block", cursor: "pointer"}} onClick={()=>this.setState({tab: 2})}>Sign Up</Typography>
                         </div>
                     </Paper>

@@ -3,11 +3,11 @@ import {loginData} from "../screens/auth/reducers/signin"
 import {signupData} from "../screens/auth/reducers/signup"
 
 
-import {memberData} from "../screens/list_members/reducers/list_member"
+import {userData} from "../screens/list_users/reducers/list_user"
 
 export default combineReducers({
     loginData,
     signupData,
 
-    memberData,
+    userData,
 });

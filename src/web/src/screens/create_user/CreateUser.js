@@ -9,7 +9,7 @@ const styles = theme => ({
     btnCreateUser: {}
 });
 
-class CreateMember extends Component {
+class CreateUser extends Component {
     state = {
         username: "",
         password: "",
@@ -112,4 +112,4 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = dispatch => ({
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(CreateMember))
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(CreateUser))

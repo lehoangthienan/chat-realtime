@@ -1,4 +1,4 @@
-import {REQUEST_LIST_USER, LIST_USER_FETCH_FAIL, LIST_USER_FETCH_SUCCESSFULL, LIST_USER_HANDLE_ERROR} from '../constants/list_member'
+import {REQUEST_LIST_USER, LIST_USER_FETCH_FAIL, LIST_USER_FETCH_SUCCESSFULL, LIST_USER_HANDLE_ERROR} from '../constants/list_user'
 
 const initialState = {
     isLoading: false,
@@ -6,7 +6,7 @@ const initialState = {
     error: null
 }
 
-export const memberData = (state = initialState, action) => {
+export const userData = (state = initialState, action) => {
     switch(action.type){
     case REQUEST_LIST_USER:
         return {

@@ -7,7 +7,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
-import {getListUsers} from './actions/list_member'
+import {getListUsers} from './actions/list_user'
 
 const styles = theme => ({
     root: {
@@ -20,7 +20,7 @@ const styles = theme => ({
     },
 });
 
-class ListMember extends Component {
+class ListUser extends Component {
 
     constructor(props){
         super(props)
@@ -29,7 +29,7 @@ class ListMember extends Component {
     }
 
     render() {
-        const { classes, memberData } = this.props;
+        const { classes, userData } = this.props;
 
         return (
             <div className={classes.root}>
@@ -44,7 +44,7 @@ class ListMember extends Component {
                     </TableHead>
                     <TableBody>
                         {
-                            memberData.users.map((user, i)=>(
+                            userData.users.map((user, i)=>(
                                 <TableRow>
                                     <TableCell component="th" scope="row">{i}</TableCell>
                                     <TableCell>{user.full_name}</TableCell>
@@ -61,11 +61,11 @@ class ListMember extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    memberData: state.memberData
+    userData: state.userData
 })
 
 const mapDispatchToProps = dispatch => ({
     getListUsers: ()=>dispatch(getListUsers()),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ListMember))
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ListUser))

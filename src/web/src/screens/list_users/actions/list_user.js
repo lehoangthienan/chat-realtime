@@ -1,4 +1,4 @@
-import {REQUEST_LIST_USER, LIST_USER_FETCH_SUCCESSFULL, LIST_USER_FETCH_FAIL, LIST_USER_HANDLE_ERROR} from '../constants/list_member'
+import {REQUEST_LIST_USER, LIST_USER_FETCH_SUCCESSFULL, LIST_USER_FETCH_FAIL, LIST_USER_HANDLE_ERROR} from '../constants/list_user'
 import {findAllUsers} from '../../../api/UserAPI'
 
 export function requestListUser(){

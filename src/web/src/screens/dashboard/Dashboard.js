@@ -26,9 +26,11 @@ import EditIcon from '@material-ui/icons/Edit';
 import {signout} from '../../api/UserAPI'
 
 import Alert from '../../components/Alert'
-import ListMember from '../list_members/ListMember';
-import CreateMember from '../create_member/CreateMember';
+import ListUser from '../list_users/ListUser';
+import CreateUser from '../create_user/CreateUser';
 
+
+import {getListUsers} from '../list_users/actions/list_user'
 
 let styles = theme => ({
     root: {
@@ -59,7 +61,9 @@ class Dashboard extends Component {
     constructor(props){
         super(props)
 
-        this.onClickSignout = this.onClickSignout.bind(this)
+        this.onClickSignout = this.onClickSignout.bind(this);
+
+        this.props.getListUsers();
     }
 
     componentDidMount(){
@@ -73,7 +77,7 @@ class Dashboard extends Component {
 
 
     render() {
-        const { classes } = this.props
+        const { classes, userData } = this.props;
 
         return (
             <div className={classes.root}>
@@ -95,25 +99,39 @@ class Dashboard extends Component {
                     <div className={classes.toolbar} />
                     <List
                         component="nav"
-                        subheader={<ListSubheader component="div">Members</ListSubheader>}
+                        subheader={<ListSubheader component="div">Users</ListSubheader>}
                     >
-                        <ListItem button onClick={()=>this.props.history.push('/app/members')}>
-                            <ListItemText primary="Members" />
+                        <ListItem button onClick={()=>this.props.history.push('/app/users')}>
+                            <ListItemText primary="Users" />
                         </ListItem>
-                        <ListItem button onClick={()=>this.props.history.push('/app/members/create')}>
-                            <ListItemText primary="Add a member" />
+                        <ListItem button onClick={()=>this.props.history.push('/app/users/create')}>
+                            <ListItemText primary="Add a user" />
                         </ListItem>
                     </List>
-                    <Divider />
-                F
+                <Divider />
+
+                <div className={classes.toolbar} />
+                    <List
+                        component="nav"
+                        subheader={<ListSubheader component="div">Chat With Friends</ListSubheader>}
+                    >
+                    {
+                            userData.users.map((user, i)=>(
+                                <ListItem button onClick={()=>this.props.history.push('/app/users')}>
+                                    <ListItemText primary={user.full_name} />
+                                </ListItem>
+                            ))
+                        }
+                    </List>
+                <Divider />
                         
                 </Drawer>
                 <main className={classes.content}>
                     <div className={classes.toolbar} />
                     <Switch>
-                        <Route exact path="/app" component={ListMember}/>
-                        <Route exact path="/app/members" component={ListMember}/>
-                        <Route exact path="/app/members/create" component={CreateMember} />
+                        <Route exact path="/app" component={ListUser}/>
+                        <Route exact path="/app/users" component={ListUser}/>
+                        <Route exact path="/app/users/create" component={CreateUser} />
      
                     </Switch>
                 </main>
@@ -123,11 +141,11 @@ class Dashboard extends Component {
 }
 
 const mapStateToProps = (state) => ({
-
+    userData: state.userData
 })
 
 const mapDispatchToProps = dispatch => ({
-
+    getListUsers: ()=>dispatch(getListUsers()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Dashboard))
