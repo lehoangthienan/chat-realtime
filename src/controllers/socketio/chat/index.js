@@ -22,7 +22,10 @@ module.exports = (io) => {
             data.sender= decoded_token._id;
             Chat.create(data)
                 .then(chat=>{
-                    socket.broadcast.emit('newMessage', chat);
+                    Chat.find({})
+                    .then(chats=>socket.broadcast.emit('newMessage', chats))
+                    .catch(err=>response_express.exception(res, err.message || err))
+                    
                 })
                 .catch(err=>response_socketio.exception(socket, nsChat, "newMessage", chat.receiver, err.message,err.message))
 
@@ -39,13 +42,15 @@ module.exports = (io) => {
                 if (!chat) {
                     return Promise.reject("chat not exist")
                 }
-
-                Object.assign(chat, data.chat)
+                let isSeen = true
+                Object.assign(chat, isSeen)
 
                 return chat.save()
             })
             .then(chat=>{
-                socket.broadcast.emit('isSeen', chat);
+                Chat.find({})
+                    .then(chats=>socket.broadcast.emit('newMessage', chats))
+                    .catch(err=>response_express.exception(res, err.message || err))
             })
             .catch(err=>response_socketio.exception(socket, nsChat, "isSeen", chat.receiver, err.message,err.message))
 

@@ -36,6 +36,7 @@ export function getChatByReceiver(userID) {
 }
 
 export function getAllChat() {
+
     return new Promise(async (resolve, reject)=>{
         return fetch(config.api_url+'/chats', {
             headers: getHeaders(),
@@ -45,7 +46,7 @@ export function getAllChat() {
             if (resJSON.status === 0) {
                 return reject(resJSON.error.message)
             }
-
+            localStorage.setItem('chatData', resJSON.result);
             resolve(resJSON.result)
         })
         .catch(err=>reject(err))

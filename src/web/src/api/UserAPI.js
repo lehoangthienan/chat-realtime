@@ -26,6 +26,9 @@ export function login(username, password) {
 
             let token = resJSON.result.token
 
+            localStorage.setItem('userID', resJSON.result.id);
+            localStorage.setItem('userToken', resJSON.result.token);
+
             setToken(token)
             resolve(token)
         })

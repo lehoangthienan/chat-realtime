@@ -6,6 +6,7 @@ var User = require(config.models_dir + '/mongo/user');
 
 module.exports = (req, res)=>{
     let miss=lib_common.checkMissParams(res, req.body, ["username", "password"])
+    let id
     if (miss) return
 
     User.findOne({username: req.body.username})
@@ -13,7 +14,7 @@ module.exports = (req, res)=>{
         if (!user) {
             return Promise.reject("user not exist")
         }
-
+        id = user._id
         let tokenPayload = {
             _id: user._id,
             username: user.username
@@ -33,7 +34,7 @@ module.exports = (req, res)=>{
             return Promise.reject("password not match")
         }
 
-        response_express.success(res, {token,refresh_token})
+        response_express.success(res, {token,refresh_token, id})
     })
     .catch(err=>{
         response_express.exception(res, err.message || err);

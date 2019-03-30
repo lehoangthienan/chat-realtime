@@ -30,7 +30,6 @@ class ListUser extends Component {
 
     render() {
         const { classes, userData } = this.props;
-
         return (
             <div className={classes.root}>
                 <Table className={classes.table}>
