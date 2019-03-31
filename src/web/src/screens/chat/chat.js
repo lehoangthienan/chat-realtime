@@ -24,9 +24,7 @@ class Chat extends Component {
         super(props)
 
         this.props.getListChats()
-
         this.socket = null;
-
         this.state = {
             status: false,
             text: "",
@@ -36,17 +34,38 @@ class Chat extends Component {
 
         getAllChat().then((res)=>{
             this.setState({chatsData: res})
+
+            if(res){
+                var dataTemp= [];
+                res.map(m=>{
+                    if(m.sender == localStorage.getItem('userID') && m.receiver == this.props.match.params.userID) dataTemp.push(m)
+                    if(m.receiver == localStorage.getItem('userID') && m.sender == this.props.match.params.userID) dataTemp.push(m)
+                })
+                if(dataTemp[0]){
+                    if(dataTemp[dataTemp.length-1].isSeen && dataTemp[dataTemp.length-1].sender == localStorage.getItem('userID')) {this.setState({seen: 'SEEN'})}
+                    else {this.setState({seen: ''})}
+                }
+            }
         })
     }
 
     onFocus = () => {
-        let token = localStorage.getItem('userToken')
-        this.socket = io("localhost:3000/chat", {"query":{"token":token}});
-        let dataTemp = this.state.chatsData
-        let chat = dataTemp[this.state.chatsData.length-1]
-        let id = chat._id
-        console.log("asdasd", id)
-        this.socket.emit("isSeen", {chat_id : id});
+            let token = localStorage.getItem('userToken')
+            this.socket = io("localhost:3000/chat", {"query":{"token":token}});
+            getAllChat().then((res)=>{
+                this.setState({chatsData: res})
+                let dataTemp = this.state.chatsData
+
+                var lastIDChat;
+                dataTemp.map(m=>{
+                    if(m.sender == this.props.match.params.userID && m.receiver == localStorage.getItem('userID')) lastIDChat = m._id
+                })
+
+                if(lastIDChat){
+                    this.socket.emit("isSeen", {chat_id : lastIDChat});
+                }
+                console.log("asdasd", lastIDChat)
+            })
     }
 
     onChange(e) {
@@ -59,30 +78,41 @@ class Chat extends Component {
             this.socket.emit("newMessage", {content : this.state.text, receiver: this.props.match.params.userID});
             var chat = {sender:localStorage.getItem('userID'), receiver:this.props.match.params.userID, content:this.state.text, _created:Date.now()};
             this.state.chatsData.push(chat)
+            this.setState({text: "", seen: ""});
         }
-        e.preventDefault();
-        this.setState({text: ""});
       }
 
     componentWillMount() {
         let token = localStorage.getItem('userToken')
         this.socket = io("localhost:3000/chat", {"query":{"token":token}});
-        this.socket.on('newMessage', (response) => {this.setState({chatsData: response})}); //lắng nghe khi có tin nhắn mới
-        this.socket.on('isSeen', (response) => {this.setState({chatsData: response})}); //isSeen
+        this.socket.on('newMessage', (response) => {
+            this.setState({chatsData: response})
+        }); //hear newMessage
+        this.socket.on('isSeen', (response) => {
+            console.log("sda",response)
+            var dataTemp= [];
+            response.map(m=>{
+                if(m.sender ==localStorage.getItem('userID') && m.receiver == this.props.match.params.userID) dataTemp.push(m)
+                if(m.receiver == localStorage.getItem('userID') && m.sender == this.props.match.params.userID) dataTemp.push(m)
+            })
+            if(dataTemp[0]){
+                if(dataTemp[dataTemp.length-1].isSeen && dataTemp[dataTemp.length-1].sender ==localStorage.getItem('userID')) {this.setState({seen: 'SEEN'})}
+                else {this.setState({seen: ''})}
+            }
+        }); //isSeen
     }
 
     render() {
         const { classes,  chatData } = this.props;
         return (
             <div className={classes.root}>
-
             <ul className="Messages-list">
                 {   
                     this.state.chatsData.map(m => {
                     if(m.receiver == this.props.match.params.userID || m.sender == this.props.match.params.userID) {return this.renderMessage(m.sender, m.content, m._created)}
-                    })}
+                })}
             </ul>
-            <div className="username" style={{marginLeft: 500}}>
+            <div className="username" style={{marginLeft: 1100}}>
                 {this.state.seen}
               </div>
                 <div className="Input">
@@ -120,10 +150,7 @@ class Chat extends Component {
           </li>
         );
       }
-    
 }
-
-
 
 const mapStateToProps = (state) => ({
     chatData: state.chatData

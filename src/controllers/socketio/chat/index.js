@@ -42,14 +42,14 @@ module.exports = (io) => {
                 if (!chat) {
                     return Promise.reject("chat not exist")
                 }
-                let isSeen = true
-                Object.assign(chat, isSeen)
+                chat.isSeen = true
+                Object.assign(chat, chat)
 
                 return chat.save()
             })
             .then(chat=>{
                 Chat.find({})
-                    .then(chats=>socket.broadcast.emit('newMessage', chats))
+                    .then(chats=>socket.broadcast.emit('isSeen', chats))
                     .catch(err=>response_express.exception(res, err.message || err))
             })
             .catch(err=>response_socketio.exception(socket, nsChat, "isSeen", chat.receiver, err.message,err.message))
