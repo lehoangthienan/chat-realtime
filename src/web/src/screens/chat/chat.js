@@ -47,55 +47,9 @@ class Chat extends Component {
         })
     }
 
-    // componentWillUpdate(){
-    //     getAllChat().then((res)=>{
-    //         this.setState({chatsData: res})
-    //         if(res){
-    //             var dataTemp= [];
-    //             res.map(m=>{
-    //                 if(m.sender == localStorage.getItem('userID') && m.receiver == this.props.match.params.userID) dataTemp.push(m)
-    //                 if(m.receiver == localStorage.getItem('userID') && m.sender == this.props.match.params.userID) dataTemp.push(m)
-    //             })
-    //             if(dataTemp[0]){
-    //                 if(dataTemp[dataTemp.length-1].isSeen && dataTemp[dataTemp.length-1].sender == localStorage.getItem('userID')) {this.setState({seen: 'SEEN'})}
-    //                 else {this.setState({seen: ''})}
-    //             }
-    //         }
-    //     })
-    // }
-
-    // static getDerivedStateFromProps(props, state){
-    //     getAllChat().then((res)=>{
-    //         if(res){
-    //             console.log("XXX3")
-    //             var dataTemp= [];
-    //             res.map(m=>{
-    //                 if(m.sender == localStorage.getItem('userID') && m.receiver == props.match.params.userID) dataTemp.push(m)
-    //                 if(m.receiver == localStorage.getItem('userID') && m.sender == props.match.params.userID) dataTemp.push(m)
-    //             })
-    //             if(dataTemp[0]){
-    //                 if(dataTemp[dataTemp.length-1].isSeen && dataTemp[dataTemp.length-1].sender == localStorage.getItem('userID'))
-    //                  {
-    //                     return {
-    //                         chatsData: res,
-    //                         seen: "SEEN"
-    //                       };
-    //                  }
-    //                 else 
-    //                 {
-    //                     return {
-    //                         chatsData: res,
-    //                         seen: ""
-    //                       };
-    //                 }
-    //             }
-    //         }
-    //     })
-    // }
-
     onFocus = () => {
             let token = localStorage.getItem('userToken')
-            this.socket = io("api/chat", {"query":{"token":token}});
+            this.socket = io("/chat", {"query":{"token":token}});
             getAllChat().then((res)=>{
                 this.setState({chatsData: res})
                 let dataTemp = this.state.chatsData
@@ -129,7 +83,7 @@ class Chat extends Component {
 
     componentWillMount() {
         let token = localStorage.getItem('userToken')
-        this.socket = io("api/chat", {"query":{"token":token}});
+        this.socket = io("/chat", {"query":{"token":token}});
         this.socket.on('newMessage', (response) => {
             this.setState({chatsData: response})
         }); //hear newMessage
