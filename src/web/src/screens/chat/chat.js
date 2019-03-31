@@ -95,7 +95,7 @@ class Chat extends Component {
 
     onFocus = () => {
             let token = localStorage.getItem('userToken')
-            this.socket = io("localhost:3000/chat", {"query":{"token":token}});
+            this.socket = io("api/chat", {"query":{"token":token}});
             getAllChat().then((res)=>{
                 this.setState({chatsData: res})
                 let dataTemp = this.state.chatsData
@@ -129,7 +129,7 @@ class Chat extends Component {
 
     componentWillMount() {
         let token = localStorage.getItem('userToken')
-        this.socket = io("localhost:3000/chat", {"query":{"token":token}});
+        this.socket = io("api/chat", {"query":{"token":token}});
         this.socket.on('newMessage', (response) => {
             this.setState({chatsData: response})
         }); //hear newMessage
