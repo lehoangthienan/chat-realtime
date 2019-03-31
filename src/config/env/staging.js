@@ -1,5 +1,5 @@
 module.exports={
-    server_url: 'http://localhost:3000',
+    server_url: 'https://chat-realtime-anle.herokuapp.com/',
     mongo: {
         host: 'ds139278.mlab.com',
         port: 39278,
