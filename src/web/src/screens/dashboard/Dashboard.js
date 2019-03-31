@@ -107,7 +107,7 @@ class Dashboard extends Component {
                     <div className={classes.toolbar} />
                     <Switch>
                         <Route exact path="/app" component={ListUser}/>
-                        <Route exact path="/app/chat/:userID" component={Chat}/>
+                        <Route exact path="/app/chat/:userID" render={props => <Chat {...props} key={props.match.params.userID || 'empty'} /> }/>
                     </Switch>
                 </main>
             </div>

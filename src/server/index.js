@@ -29,7 +29,10 @@ const start = () => {
 		});
 
 		app.use('/', require(config.controllers_dir+'/express'));
-
+		app.get('*', (req, res) => {
+			res.sendFile(path.join(config.web_dir+"/build/index.html"));
+		})
+		
 		//socket
 		io.use(require(config.library_dir+'/middleware').socketioMiddleware);
 		io.on('connection', (socket) => {

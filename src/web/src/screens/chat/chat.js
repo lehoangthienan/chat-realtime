@@ -31,10 +31,8 @@ class Chat extends Component {
             chatsData: [],
             seen: '',
         }
-
         getAllChat().then((res)=>{
             this.setState({chatsData: res})
-
             if(res){
                 var dataTemp= [];
                 res.map(m=>{
@@ -48,6 +46,52 @@ class Chat extends Component {
             }
         })
     }
+
+    // componentWillUpdate(){
+    //     getAllChat().then((res)=>{
+    //         this.setState({chatsData: res})
+    //         if(res){
+    //             var dataTemp= [];
+    //             res.map(m=>{
+    //                 if(m.sender == localStorage.getItem('userID') && m.receiver == this.props.match.params.userID) dataTemp.push(m)
+    //                 if(m.receiver == localStorage.getItem('userID') && m.sender == this.props.match.params.userID) dataTemp.push(m)
+    //             })
+    //             if(dataTemp[0]){
+    //                 if(dataTemp[dataTemp.length-1].isSeen && dataTemp[dataTemp.length-1].sender == localStorage.getItem('userID')) {this.setState({seen: 'SEEN'})}
+    //                 else {this.setState({seen: ''})}
+    //             }
+    //         }
+    //     })
+    // }
+
+    // static getDerivedStateFromProps(props, state){
+    //     getAllChat().then((res)=>{
+    //         if(res){
+    //             console.log("XXX3")
+    //             var dataTemp= [];
+    //             res.map(m=>{
+    //                 if(m.sender == localStorage.getItem('userID') && m.receiver == props.match.params.userID) dataTemp.push(m)
+    //                 if(m.receiver == localStorage.getItem('userID') && m.sender == props.match.params.userID) dataTemp.push(m)
+    //             })
+    //             if(dataTemp[0]){
+    //                 if(dataTemp[dataTemp.length-1].isSeen && dataTemp[dataTemp.length-1].sender == localStorage.getItem('userID'))
+    //                  {
+    //                     return {
+    //                         chatsData: res,
+    //                         seen: "SEEN"
+    //                       };
+    //                  }
+    //                 else 
+    //                 {
+    //                     return {
+    //                         chatsData: res,
+    //                         seen: ""
+    //                       };
+    //                 }
+    //             }
+    //         }
+    //     })
+    // }
 
     onFocus = () => {
             let token = localStorage.getItem('userToken')
@@ -79,6 +123,7 @@ class Chat extends Component {
             var chat = {sender:localStorage.getItem('userID'), receiver:this.props.match.params.userID, content:this.state.text, _created:Date.now()};
             this.state.chatsData.push(chat)
             this.setState({text: "", seen: ""});
+            e.preventDefault();
         }
       }
 
@@ -109,7 +154,8 @@ class Chat extends Component {
             <ul className="Messages-list">
                 {   
                     this.state.chatsData.map(m => {
-                    if(m.receiver == this.props.match.params.userID || m.sender == this.props.match.params.userID) {return this.renderMessage(m.sender, m.content, m._created)}
+                    if((m.receiver == this.props.match.params.userID && m.sender == localStorage.getItem('userID'))) {return this.renderMessage(m.sender, m.content, m._created)}
+                    if((m.receiver == localStorage.getItem('userID') && m.sender == this.props.match.params.userID)) {return this.renderMessage(m.sender, m.content, m._created)}
                 })}
             </ul>
             <div className="username" style={{marginLeft: 1100}}>
